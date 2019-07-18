@@ -35,6 +35,9 @@ def clientes(request):
     )
 
 
+# Funciones para manipulacion de proyectos
+
+
 def proyectos(request, pk=None):
     if pk:
         proyecto = Proyecto.objects.get(pk=pk)
@@ -59,6 +62,26 @@ def proyectos(request, pk=None):
             args, )
 
 
+def proyectos_crear(request, pk=None):
+    form = forms.ProyectoForms()
+    if request.method == 'POST':
+        form = forms.ProyectoForms(data=request.POST)
+        if form.is_valid():
+            proyectoF = form.save(commit=False)
+            form.save()
+            pk = proyectoF.idTarea
+            return tarea(request, pk)
+
+    context = {'form': form}
+    return render(
+        request,
+        'proyectos.html',
+    )
+
+
+# Funciones para manipulacion de tareas
+
+
 def tarea(request, pk):
     tarea_pk = Tarea.objects.get(idTarea=pk)
     args = {'tarea': tarea_pk}
@@ -66,6 +89,42 @@ def tarea(request, pk):
         request,
         'tarea.html',
         args,
+    )
+
+
+def tarea_edit(request, pk):
+    tarea_pk = Tarea.objects.get(idTarea=pk)
+    form = forms.TareaForms(instance=tarea_pk)
+    if request.method == 'POST':
+        form = forms.TareaForms(instance=tarea_pk, data=request.POST)
+        if form.is_valid():
+            tareaF = form.save(commit=False)
+            form.save()
+            return tarea(request, pk)
+
+    context = {'form': form}
+    return render(
+        request,
+        'tarea_edit.html',
+        context
+    )
+
+
+def tarea_crear(request):
+    form = forms.TareaForms()
+    if request.method == 'POST':
+        form = forms.TareaForms(data=request.POST)
+        if form.is_valid():
+            tareaF = form.save(commit=False)
+            form.save()
+            pk = tareaF.idTarea
+            return tarea(request, pk)
+
+    context = {'form': form}
+    return render(
+        request,
+        'tarea_edit.html',
+        context
     )
 
 
@@ -105,42 +164,3 @@ def login(request):
         'login.html',
 
     )
-
-
-def tarea_edit(request, pk):
-    tarea_pk = Tarea.objects.get(idTarea=pk)
-    form = forms.TareaForms(instance=tarea_pk)
-    if request.method == 'POST':
-        form = forms.TareaForms(instance=tarea_pk, data=request.POST)
-        if form.is_valid():
-
-            tareaF = form.save(commit=False)
-            form.save()
-            return tarea(request, pk)
-
-    context = {'form': form}
-    return render(
-        request,
-        'tarea_edit.html',
-        context
-    )
-
-
-def tarea_crear(request):
-    form = forms.TareaForms()
-    if request.method == 'POST':
-        form = forms.TareaForms(data=request.POST)
-        if form.is_valid():
-
-            tareaF = form.save(commit=False)
-            form.save()
-            pk = tareaF.idTarea
-            return tarea(request, pk)
-
-    context = {'form': form}
-    return render(
-        request,
-        'tarea_edit.html',
-        context
-    )
-

@@ -1,7 +1,6 @@
 from django import forms
 
 from mgmtApp import models
-from django.utils.translation import ugettext_lazy as _
 
 
 class TareaForms(forms.ModelForm):
@@ -44,5 +43,39 @@ class TareaForms(forms.ModelForm):
                                                  'rows': 5}),
             'fechaIni': forms.DateInput(attrs={'class': 'input'}),
             'fechaFin': forms.DateInput(attrs={'class': 'input'}),
+
+        }
+
+
+class ProyectoForms(forms.ModelForm):
+    class Meta:
+        model = models.Tarea
+
+        fields = [
+            'nombre',
+            'cliente',
+            'encargado',
+            'tipo',
+            'observacion',
+        ]
+        field_order = {'nombre',
+                       'cliente',
+                       'encargado',
+                       'tipo',
+                       'observacion', }
+
+        labels = {
+            'nombre': 'Nombre',
+            'cliente': 'Cliente',
+            'encargado': 'Encargado',
+            'tipo': 'Tipo',
+            'observacion': 'Observacion',
+        }
+
+        widgets = {
+
+            'observacion': forms.Textarea(attrs={'class': 'input',
+                                                 'rows': 5}),
+
 
         }
