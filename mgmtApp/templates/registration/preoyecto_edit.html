@@ -1,0 +1,33 @@
+{% extends "basic.html" %}
+{% block fillContent %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h4 class="m-0 font-weight-bold text-primary">Proyecto</h4>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+
+            <div class="column is-mobile">
+                <div class="is is-half is-offset-one-quarter">
+                    {% csrf_token %}
+                    {%for field in form%}
+                    <div class="field">
+
+                        <p><label for="{{field.id_for_label}}" class="label" style="vertical-align: top; width: 170px;
+    height: 10px;">{{field.label_tag }}</label>
+                            {{field}}</p>
+                    </div>
+                    {%endfor%}
+                </div>
+            </div>
+
+
+            <input type="submit" value="Guardar" class="button is primary">
+
+        </form>
+
+    </div>
+</div>
+
+
+{% endblock %}
