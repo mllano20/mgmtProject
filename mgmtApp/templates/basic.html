@@ -358,6 +358,14 @@
                 </ul>
 
             </nav>
+            {% if messages %}
+            {%for message in messages %}
+            <div class="alert alert-{{ message.tags}} role="alert">
+                {{message}}
+            </div>
+
+            {% endfor %}
+            {% endif %}
 
             {% block fillContent %}
 
@@ -409,6 +417,7 @@
 <!-- Page level custom scripts -->
 <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
 <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+<script src="{% static 'js/modal.js' %}"></script>
 
 </body>
 

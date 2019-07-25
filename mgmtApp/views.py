@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from mgmtApp import forms
+from django.contrib import messages
 
 from .models import Team, Cliente, Proyecto, Vehiculo, Tarea
 from .serializer import ClienteSerializer, UserSerializer, ProyectoSerializer
@@ -62,22 +63,39 @@ def proyectos(request, pk=None):
             args, )
 
 
-def proyectos_crear(request, pk=None):
-    form = forms.ProyectoForms()
+def proyectos_edit(request, pk):
+    proyecto_pk = Proyecto.objects.get(pk=pk)
+    form = forms.ProyectoForms(instance=proyecto_pk)
+    if request.method == 'POST':
+        form = forms.ProyectoForms(instance=proyecto_pk, data=request.POST)
+        if form.is_valid():
+            proyectoF = form.save(commit=False)
+            form.save()
+            return proyectos(request)
+
+    context = {'form': form}
+    return render(
+        request,
+        'proyecto_edit.html',
+        context
+    )
+
+
+def proyectos_crear(request):
     if request.method == 'POST':
         form = forms.ProyectoForms(data=request.POST)
         if form.is_valid():
             proyectoF = form.save(commit=False)
             form.save()
-            pk = proyectoF.idTarea
-            return tarea(request, pk)
+            pk = proyectoF.pk
+            return proyectos(request, pk)
 
     context = {'form': form}
     return render(
         request,
-        'proyectos.html',
+        'proyecto_edit.html',
+        context
     )
-
 
 # Funciones para manipulacion de tareas
 
@@ -126,6 +144,13 @@ def tarea_crear(request):
         'tarea_edit.html',
         context
     )
+
+
+def tarea_delete(request, pk):
+    tarea_pk = Tarea.objects.get(idTarea=pk)
+    proyecto_tarea = tarea_pk.proyecto
+    tarea_pk.delete()
+    return proyectos(request, proyecto_tarea.pk)
 
 
 def vehiculos(request):

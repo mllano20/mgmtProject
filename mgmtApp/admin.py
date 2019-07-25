@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Cliente, Proyecto, Team, Vehiculo, Tarea, Transaccion, Registro, Reporte
+from .models import Cliente, Proyecto, Team, Vehiculo, Tarea, Transaccion, Registro, Reporte, Sitio, reporteSitio
+from .models import Imagen
 
 
 class ClienteAdmin(admin.ModelAdmin):
@@ -41,6 +42,10 @@ class ReporteAdmin(admin.ModelAdmin):
     list_display = ('fecha', 'descripcion', 'Tarea')
 
 
+class SitioAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'tipo', 'coordenadas')
+
+
 admin.site.register(Team, TeamAdmin)
 admin.site.register(Cliente, ClienteAdmin)
 admin.site.register(Proyecto, ProyectoAdmin)
@@ -49,3 +54,7 @@ admin.site.register(Tarea)
 admin.site.register(Transaccion, TransaccionAdmin)
 admin.site.register(Registro, RegistroAdmin)
 admin.site.register(Reporte, ReporteAdmin)
+admin.site.register(Sitio, SitioAdmin)
+admin.site.register(reporteSitio)
+admin.site.register(Imagen)
+

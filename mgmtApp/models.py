@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import CharField
 from phonenumber_field.modelfields import PhoneNumberField
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -32,7 +33,7 @@ class Proyecto(models.Model):
     cliente = models.ForeignKey('Cliente', on_delete=models.SET_NULL, null=True)
     encargado = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='encargado')
     tipo = models.CharField(max_length=100, help_text="Ingrese el tipo del trabajo a ejecutar")
-    observacion = models.TextField(max_length=1000, help_text="Observaciones", null=True)
+    observacion = models.TextField(max_length=1000, help_text="Observaciones", null=True, blank=True)
 
     def __str__(self):
         # String que representa a al Cliente
@@ -205,3 +206,93 @@ class Reporte(models.Model):
     def __str__(self):
         # String que representa a al Usuario
         return self.descripcion
+
+
+class Sitio(models.Model):
+
+    # Modelo que contiene los datos de los Sitios de trabajo
+
+    nombre = models.CharField(max_length=50, help_text="Nombre del Sitio")
+    TIPO = (
+        ('s', 'Sede'),
+        ('f', 'Filial')
+    )
+    tipo = models.CharField(max_length=1, choices=TIPO, default='f')
+    coordenadas = models.URLField(max_length=300, help_text="Coordenadas del Sitio en Google Maps")
+    capacitador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True)
+    descripcion = models.CharField(max_length=100, help_text="Descripcion del Sitio")
+    observaciones = models.CharField(max_length=1000, null=True, blank=True)
+    estacionCaptura = models.IntegerField(help_text="Cantidad de Estacionces de Captura", null=True, blank=True,
+                                          default=1)
+    estacionEntrega = models.IntegerField(help_text="Cantidad de Estacionces de Entrega", null=True, blank=True
+                                          , default=1)
+    impresoraCedula = models.IntegerField(help_text="Cantidad de Impresoras de Cedulas", null=True, blank=True
+                                          , default=0)
+    impresoraPasaporte = models.IntegerField(help_text="Cantidad de Impresoras de Pasaportes", null=True, blank=True
+                                             , default=0)
+    estacionMovil = models.IntegerField(help_text="Cantidad de Estaciones de Captura Movil", null=True, blank=True
+                                        , default=0)
+    boxAtencion = models.IntegerField(help_text="Cantidad de Boxes de Atencion", null=True, blank=True, default=1)
+    escritorio = models.IntegerField(help_text="Cantidad de escritorios", null=True, blank=True, default=1)
+    armario = models.IntegerField(help_text="Cantidad de armarios", null=True, blank=True, default=0)
+    sillaAgente = models.IntegerField(help_text="Cantidad de Sillas para Agentes", null=True, blank=True, default=2)
+    sillaInterlocutor = models.IntegerField(help_text="Cantidad de Sillas para Interlocutores", null=True, blank=True
+                                            , default=2)
+    tandem = models.IntegerField(help_text="Cantidad de Tandems", null=True, blank=True, default=2)
+    escritorioOperario = models.IntegerField(help_text="Cantidad de Escritorios para Operarios de Digitalizacion",
+                                             null=True, blank=True, default=0)
+
+    def __str__(self):
+        # String que representa a al Usuario
+        return self.nombre
+
+
+class reporteSitio(models.Model):
+
+    # Modelo para reportes de Sitios proyecto Solnet
+
+    TIPO = (
+        ('c', 'Capacitacion'),
+        ('C', 'Cableado')
+    )
+    sitio = models.ForeignKey(Sitio, on_delete=models.SET_NULL, null=True)
+    tipo = models.CharField(max_length=1, choices=TIPO, default='c')
+    coordenadas = models.URLField(max_length=300, help_text="Coordenadas del Sitio en Google Maps")
+    capacitador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True)
+    descripcion = models.CharField(max_length=100, help_text="Descripcion del Sitio")
+    observaciones = models.CharField(max_length=1000, null=True, blank=True)
+    estacionCaptura = models.IntegerField(help_text="Cantidad de Estacionces de Captura", null=True, blank=True,
+                                          default=0)
+    estacionEntrega = models.IntegerField(help_text="Cantidad de Estacionces de Entrega", null=True, blank=True
+                                          , default=0)
+    impresoraCedula = models.IntegerField(help_text="Cantidad de Impresoras de Cedulas", null=True, blank=True
+                                          , default=0)
+    impresoraPasaporte = models.IntegerField(help_text="Cantidad de Impresoras de Pasaportes", null=True, blank=True
+                                             , default=0)
+    estacionMovil = models.IntegerField(help_text="Cantidad de Estaciones de Captura Movil", null=True, blank=True
+                                        , default=0)
+    boxAtencion = models.IntegerField(help_text="Cantidad de Boxes de Atencion", null=True, blank=True, default=0)
+    escritorio = models.IntegerField(help_text="Cantidad de escritorios", null=True, blank=True, default=0)
+    armario = models.IntegerField(help_text="Cantidad de armarios", null=True, blank=True, default=0)
+    sillaAgente = models.IntegerField(help_text="Cantidad de Sillas para Agentes", null=True, blank=True, default=0)
+    sillaInterlocutor = models.IntegerField(help_text="Cantidad de Sillas para Interlocutores", null=True, blank=True
+                                            , default=0)
+    tandem = models.IntegerField(help_text="Cantidad de Tandems", null=True, blank=True, default=0)
+    escritorioOperario = models.IntegerField(help_text="Cantidad de Escritorios para Operarios de Digitalizacion",
+                                             null=True, blank=True, default=0)
+
+    observaciones = models.TextField(max_length=1000, null=True, blank=True)
+
+    def __str__(self):
+        return self.sitio.nombre
+
+
+class Imagen(models.Model):
+
+    imagen = models.FileField()
+    reporte = models.ForeignKey(reporteSitio, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return self.imagen.url

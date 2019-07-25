@@ -49,7 +49,7 @@ class TareaForms(forms.ModelForm):
 
 class ProyectoForms(forms.ModelForm):
     class Meta:
-        model = models.Tarea
+        model = models.Proyecto
 
         fields = [
             'nombre',

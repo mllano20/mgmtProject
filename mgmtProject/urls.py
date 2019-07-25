@@ -21,7 +21,7 @@ from django.urls import include
 from django.urls import path
 from rest_framework import routers
 from mgmtApp import views
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 
 # Serializers define the API representation.
 
@@ -37,9 +37,12 @@ urlpatterns = [
     url(r'^mgmtApp/', include('mgmtApp.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     url(r'^api-auth/', include('rest_framework.urls')),
-    path('api/token/', TokenObtainPairView.as_view()),
-    path('api/toker/refresh', TokenRefreshView.as_view()),
+
 
 ]
 
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+

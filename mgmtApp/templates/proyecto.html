@@ -1,8 +1,10 @@
 {% extends "basic.html" %}
-
+{% load staticfiles %}
 {% block fillContent %}
 <!-- DataTales Example -->
 <!-- Begin Page Content -->
+
+
 <div class="container-fluid">
 
     <!-- Page Heading -->
@@ -15,6 +17,9 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h4 class="m-0 font-weight-bold text-primary">Proyecto: {{proyecto.nombre}}</h4>
+            <a href="{% url 'proyecto_edit' pk=proyecto.pk %}"
+               class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-download fa-sm text-white-50"></i> Editar</a>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -45,12 +50,14 @@
 
                     <thead>
                     <tr>
-                        <th colspan="5"><h6 class="h5 mb-0 text-gray-800">Tareas
-                            <div>
-                            <a href="{% url 'tarea_crear' %}"
-                               class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                    class="fas fa-download fa-sm text-white-50"></i> Agregar</a></div>
-                        </h6></th>
+                        <th colspan="5">
+                            <h6 class="h5 mb-0 text-gray-800">Tareas
+                                <div>
+                                    <a href="{% url 'tarea_crear' %}"
+                                       class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                            class="fas fa-download fa-sm text-white-50"></i> Agregar</a></div>
+                            </h6>
+                        </th>
 
                     </tr>
                     <tr>
@@ -73,10 +80,20 @@
                     </tfoot>
                     <tbody>
                     {% block content %}
+
                     <div class="col-md-4">
                         {% for tarea in tareas %}
+
                         <tr>
-                            <td><a href="{% url 'tarea' pk=tarea.idTarea%}">{{ tarea.descripcion}}</a></td>
+                            <td><a href="{% url 'tarea' pk=tarea.idTarea%}">{{ tarea.descripcion}}</a>
+                                <button type="button" class="close" aria-label="Close" data-toggle="modal"
+                                        href="#deleteModal" data-url="{% url 'tarea_delete' pk=tarea.idTarea %}">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+
+                            </td>
+
+
                             <td>{{ tarea.fechaIni}}</td>
                             <td>{{ tarea.fechaFin}}</td>
                             <td>{{ tarea.team}}</td>
@@ -94,8 +111,34 @@
             </div>
         </div>
     </div>
-
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Alerta: Accion
+                        Irreversible</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Esta seguro que desea eliminar la Tarea?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <a>
+                        <button type="button" class="btn btn-primary" id="btnDelete">Eliminar</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
+
 
 {% endblock %}
