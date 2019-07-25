@@ -77,5 +77,29 @@ class ProyectoForms(forms.ModelForm):
             'observacion': forms.Textarea(attrs={'class': 'input',
                                                  'rows': 5}),
 
+        }
+
+
+class ReporteSitioForms(forms.ModelForm):
+    class Meta:
+        fields = [
+            'sitio',
+            'tipo',
+            'estacionCaptura',
+            'observaciones',
+
+        ]
+
+        labels = {
+            'sitio': 'Sitio',
+            'tipo': 'Tipo',
+            'estacionCaptura': 'Estaciones de Captura',
+            'observaciones': 'Observaciones',
+
+        }
+
+        widgets = {
+            'observaciones': forms.Textarea(attrs={'class': 'input',
+                                                   'rows': 5}),
 
         }

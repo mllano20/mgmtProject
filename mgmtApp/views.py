@@ -166,6 +166,25 @@ def vehiculos(request):
         args,
     )
 
+# Funciones para manipulacion de reportes de sitios
+
+
+def reportesitios_crear(request):
+    form = forms.ReporteSitioForms()
+    if request.method == 'POST':
+        form = forms.ReporteSitioForms(data=request.POST)
+        if form.is_valid():
+            rep_sitio = form.save(commit=False)
+            form.save()
+            pk = rep_sitio.idTarea
+
+    context = {'form': form}
+    return render(
+        request,
+        'tarea_edit.html',
+        context
+    )
+
 
 class ClienteView(viewsets.ModelViewSet):
     queryset = Cliente.objects.all()

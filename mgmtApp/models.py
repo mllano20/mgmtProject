@@ -258,11 +258,6 @@ class reporteSitio(models.Model):
     )
     sitio = models.ForeignKey(Sitio, on_delete=models.SET_NULL, null=True)
     tipo = models.CharField(max_length=1, choices=TIPO, default='c')
-    coordenadas = models.URLField(max_length=300, help_text="Coordenadas del Sitio en Google Maps")
-    capacitador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True)
-    descripcion = models.CharField(max_length=100, help_text="Descripcion del Sitio")
-    observaciones = models.CharField(max_length=1000, null=True, blank=True)
     estacionCaptura = models.IntegerField(help_text="Cantidad de Estacionces de Captura", null=True, blank=True,
                                           default=0)
     estacionEntrega = models.IntegerField(help_text="Cantidad de Estacionces de Entrega", null=True, blank=True
